@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# build.sh
+USERNAME=kiruba007
+APP_NAME=react-app
 
-IMAGE_NAME="react-app"
-TAG="latest"
+# Tag and push to dev
+docker build -t $USERNAME/${APP_NAME}-dev:latest .
+docker push $USERNAME/${APP_NAME}-dev:latest
 
-echo "🔨 Building Docker image: $IMAGE_NAME:$TAG"
-docker build -t $IMAGE_NAME:$TAG .
-
-if [ $? -eq 0 ]; then
-    echo "✅ Docker image built successfully."
-else
-    echo "❌ Docker image build failed!"
-    exit 1
+# Tag and push to prod (optional)
+read -p "Push to prod repo? (y/n): " answer
+if [ "$answer" == "y" ]; then
+  docker tag $USERNAME/${APP_NAME}-dev:latest $USERNAME/${APP_NAME}-prod:latest
+  docker push $USERNAME/${APP_NAME}-prod:latest
 fi
+
 
